@@ -1,5 +1,5 @@
 {
-  "name": "vite-app",
+  "name": "vue3-vite-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,15 +11,18 @@
   },
   "dependencies": {
     "@vueuse/core": "^9.1.1",
+    "axios": "^0.27.2",
     "element-plus": "^2.2.12",
+    "js-cookie": "^3.0.1",
     "pinia": "^2.0.18",
     "socket.io-client": "^4.5.1",
     "vue": "^3.2.37",
-    "vue-i18n": "^9.2.2",
+    "vue-i18n": "^9.3.0-beta.3",
     "vue-router": "^4.1.5"
   },
   "devDependencies": {
     "@iconify-json/ep": "^1.1.7",
+    "@types/js-cookie": "^3.0.2",
     "@types/node": "^18.7.14",
     "@vitejs/plugin-vue": "^3.0.0",
     "commitizen": "^4.2.5",

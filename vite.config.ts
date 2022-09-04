@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from 'url';
+import path from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import unocss from 'unocss/vite'
@@ -7,6 +7,7 @@ import {
   presetIcons,
   presetUno
 } from 'unocss'
+
 
 export default defineConfig({
   plugins: [vue() , unocss({
@@ -17,7 +18,12 @@ export default defineConfig({
   })],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': path.join(__dirname, 'src'),
     },
+  },
+  server: {
+    host: '127.0.0.1', //ip地址
+    port: 5000, //端口号
+    open: false //启动后是否自动打开浏览器
   }
 })

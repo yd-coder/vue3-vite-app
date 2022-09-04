@@ -11,7 +11,7 @@
         <i inline-flex i="dark:ep-moon ep-sunny" />
       </button>
     </el-menu-item>
-    <el-menu-item h="full" index="2">
+    <el-menu-item h="full" @click="toggleLanguage()" index="2">
       <button
         border-none
         w-full
@@ -38,7 +38,22 @@
 
 <script setup lang="ts">
 import { useDark, useToggle } from '@vueuse/core'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
+let language: boolean = true
+
+const toggleLanguage = () => {
+  if (language) {
+    locale.value = 'en'
+    localStorage.setItem('lang', 'en')
+    language = !language
+  } else {
+    locale.value = 'zh'
+    localStorage.setItem('lang', 'zh')
+    language = !language
+  }
+}
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 </script>

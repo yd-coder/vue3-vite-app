@@ -1,4 +1,9 @@
 const nodemailer = require('nodemailer')
+const { body, validationResult } = require('express-validator') // 导入验证模块
+const express = require('express')
+const router = express.Router()
+const db = require('../db')
+const session = require('express-session')
 
 const obj = {
   transporter: nodemailer.createTransport({
@@ -48,7 +53,7 @@ const obj = {
                       <div style="line-height:1.5;font-size:14px;margin-bottom:25px;color:#4d4d4d;">
                           <strong style="display:block;margin-bottom:15px;">尊敬的用户：<span style="color:#f60;font-size: 16px;"></span>您好！</strong>
                           <strong style="display:block;margin-bottom:15px;">
-                              您正在进行<span style="color: red">账号注册</span>操作，请在验证码输入框中输入：<span style="color:#f60;font-size: 24px">${code}</span>，以完成操作。
+                              您正在进行<span style="color: red">账号注册</span>操作，请在验证码输入框中输入：<span style="color:#f60;font-size: 24px">${code}</span>，以完成操作(验证码5分钟内有效)。
                           </strong>
                       </div>
                       <div style="margin-bottom:30px;">
@@ -84,6 +89,40 @@ const obj = {
   },
 }
 
-// 抛出对象以接收
+// 获取邮箱验证码
+router.post(
+  '/sendMailCode',
+  [body('email').isEmail().withMessage('请输入正确格式的邮箱！')],
+  (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.send({ code: 400, msg: errors.array()[0].msg })
+    }
+    const { email } = req.body
+    // 验证邮箱是否已经注册
+    db.query(
+      'select * from user where username = ? ',
+      email,
+      (err, results) => {
+        if (err) {
+          return res.send({ code: 400, msg: '服务器错误' })
+        }
+        if (results.length > 0) {
+          return res.send({
+            code: 400,
+            msg: '邮箱已被注册！请尝试直接登录或更换邮箱',
+          })
+        } else {
+          const MAIL_CODE = Math.floor(Math.random() * (9999 - 1000)) + 1000
+          const timestamp = +new Date()
+          req.session.mailCode = MAIL_CODE
+          req.session.mailCodeTime = timestamp
+          obj.send(email, MAIL_CODE)
+          res.send({ code: 200, msg: '验证码已发您邮箱，请注意查收' })
+        }
+      }
+    )
+  }
+)
 
-module.exports = obj
+module.exports = router
