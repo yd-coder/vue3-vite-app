@@ -13,8 +13,11 @@ const expressJWT = require('express-jwt')
 
 // 使用 .unless({ path: [/^\/api\//] }) 指定哪些接口不需要进行 Token 的身份认证
 app.use(
-  expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api\//] })
+  expressJWT({ secret: config.jwtSecretKey }).unless({
+    path: ['/api/login', '/api/register', '/api/sendMailCode'],
+  })
 )
+
 // 使用express-session 来存放数据到session中
 app.use(
   session({
@@ -84,6 +87,6 @@ app.use('/api', router)
 //   })
 // })
 
-app.listen(3000, function () {
-  console.log('listening on *:3000')
+app.listen(5001, function () {
+  console.log('listening on *:5001')
 })

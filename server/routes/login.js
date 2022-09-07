@@ -40,6 +40,9 @@ router.post('/login', expressJoi(login_rule), (req, res) => {
       msg: '登录成功，欢迎回来！',
       // 为了方便客户端使用 Token，在服务器端直接拼接上 Bearer 的前缀
       token: 'Bearer ' + tokenStr,
+      data: {
+        ...user,
+      },
     })
   })
 })

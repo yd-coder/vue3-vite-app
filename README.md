@@ -25,6 +25,8 @@
 | js-cookie        | 操作cookie使用库                 |                     |                                     |
 | prettier         | 代码规范库                       |                     |                                     |
 | commitizen       | 提交规范库                       |                     |                                     |
+| nprogress        | 全局加载进度条                   |                     |                                     |
+| wangeditor       | 富文本编辑器                     |                     |                                     |
 
  
 

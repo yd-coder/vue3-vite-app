@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import { reactive, ref, computed } from 'vue'
 import { sendMailCode, register, login } from '@/api/user'
-import { useTestStore } from '@/store/index'
+import { useMainStore } from '@/store/index'
 import { ElNotification } from 'element-plus'
 import type { ElForm } from 'element-plus'
 import type { FormInstance } from 'element-plus'
@@ -114,6 +114,7 @@ import { validatorPassword } from '../utils/validate'
 import { useI18n } from 'vue-i18n'
 import router from '@/router'
 
+const store = useMainStore()
 const { t } = useI18n()
 const formRef = ref<FormInstance>() // 表单实例
 const useType = ref('login') // 类型
@@ -257,7 +258,11 @@ const submitForm = (formEl: InstanceType<typeof ElForm> | undefined) => {
               if (!formEl) return
               formEl.resetFields()
               ElNotification.success(res.msg)
-              useTestStore().setToken(res?.token)
+              store.setToken(res?.token)
+              store.userInfo = res?.data
+              if (!localStorage.getItem('userInfo')) {
+                localStorage.setItem('userInfo', JSON.stringify(res?.data))
+              }
               router.push({ path: '/chat' })
             } else
               ElNotification({
