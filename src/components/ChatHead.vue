@@ -1,5 +1,5 @@
 <template>
-  <header class="text-center px-20px h-35px">
+  <header class="text-center px-20px h-35px leading-35px">
     <span class="fw-600">{{ store.recipient?.nick_name }} </span>
   </header>
 </template>

@@ -109,7 +109,7 @@ function browsertype() {
   } //判断是否IE浏览器
 }
 
-// 按下回车键
+// 按下回车键发送消息
 function keyDown(event: any) {
   if (event.ctrlKey && event.keyCode === 13) {
     let len = store.editor.txt.html().trim().length
@@ -141,6 +141,7 @@ function keyDown(event: any) {
 
 // 发送校验
 function sendVerify() {
+  // 校验是否有内容
   let sendContent = store.editor.txt.html().trim()
   if (!sendContent.length) {
     return

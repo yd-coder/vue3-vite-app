@@ -17,18 +17,16 @@ export const useMainStore = defineStore({
       readyRecipient: null,
       sessionList: [], // 会话列表
       sessionSelectId: 0, // 会话列表选中id
-      allSessionList: [], // 所有会话列表
-      allSessionSelectId: 0, // 所有会话列表选中id
-      socket: null,
-      conversitionList: [],
+      socket: null, // socket实例
+      conversitionList: [], // 聊天记录列表
       sendInfo: null,
-      emojiList: emojiList,
+      emojiList: emojiList, // 表情列表
       chatScrollbar: null,
       chatEditor: null, // 富文本编辑器ref
       editor: null, // 富文本编辑器实例
       editorData: '', // 富文本编辑器数据
-      openMusic: false,
-      tipMusic: null,
+      openMusic: true, // 是否打开提示音
+      tipMusic: null, // 提示音
     }
   },
   //类似于computed 可以帮我们去修饰我们的值
@@ -46,6 +44,13 @@ export const useMainStore = defineStore({
     setToken(data: any) {
       Cookies.set('Authorization', data)
       this.token = data
+    },
+    // 声音提示
+    playMusic() {
+      if (this.tipMusic != null && this.openMusic) {
+        this.tipMusic.currentTime = 0
+        this.tipMusic.play()
+      }
     },
     // 设置会话窗口到达底部
     toBottom() {
@@ -129,8 +134,7 @@ export const useMainStore = defineStore({
         state.token = undefined
         state.sessionList = []
         state.sessionSelectId = 0
-        state.allSessionList = []
-        state.allSessionSelectId = 0
+        localStorage.removeItem('userInfo')
       })
       if (this.socket != null) {
         this.socket.disconnect()

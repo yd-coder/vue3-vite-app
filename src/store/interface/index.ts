@@ -6,8 +6,6 @@ export interface Main {
   readyRecipient: User | null
   sessionList: Array<any>
   sessionSelectId: number
-  allSessionList: Array<any>
-  allSessionSelectId: number
   socket: any
   conversitionList: Array<any>
   sendInfo: User | null

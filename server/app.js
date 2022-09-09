@@ -1,6 +1,4 @@
 const express = require('express')
-const http = require('http')
-const server = http.createServer()
 const cors = require('cors')
 const router = require('./routes/index')
 const app = express()
@@ -13,7 +11,9 @@ const expressJWT = require('express-jwt')
 
 // 使用 .unless({ path: [/^\/api\//] }) 指定哪些接口不需要进行 Token 的身份认证
 app.use(
-  expressJWT({ secret: config.jwtSecretKey }).unless({
+  expressJWT({
+    secret: config.jwtConfig.secret,
+  }).unless({
     path: ['/api/login', '/api/register', '/api/sendMailCode'],
   })
 )
@@ -64,29 +64,10 @@ app.use(function (err, req, res, next) {
 // 注册路由模块，添加访问前缀
 app.use('/api', router)
 
-// const io = require('socket.io')(http, {
-//   cors: {
-//     origin: '*',
-//     methods: ['GET', 'POST'],
-//   },
-// })
-
-// // socket监听连接
-// io.on('connection', (socket) => {
-//   console.log('连接成功')
-
-//   // receive a message from the client
-//   socket.on('message', (e) => {
-//     var username = e.name
-//     io.emit('message', e)
-//   })
-
-//   socket.on('disconnecting', () => {
-//     console.log(socket.id)
-//     console.log('用户离开，连接断开')
-//   })
-// })
-
-app.listen(5001, function () {
+const server = app.listen(5001, function () {
   console.log('listening on *:5001')
 })
+
+// 聊天socket
+const socket = require('./utils/socket')
+socket(server)

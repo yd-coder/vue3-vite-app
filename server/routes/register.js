@@ -18,7 +18,6 @@ router.post('/register', expressJoi(register_rule), (req, res) => {
     return res.send({ code: 400, msg: '两次输入的密码不一致！' })
   }
   // 验证邮箱验证码的正确性和有效性
-  console.log(req.session)
   if (
     code != req.session.mailCode ||
     timestamp - req.session.mailCodeTime > 300000

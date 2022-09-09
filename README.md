@@ -1,8 +1,8 @@
 ### 环境准备
 
-- 服务端：node.js（版本建议：>= v14.19.3）、兼容s3的对象存储（用于存储图片、视频等文件）
+- 服务端：node.js（版本建议：>= v14.19.3）
 - web端：node.js（版本建议：>= v14.19.3）
-- 数据库：mysql（版本建议：>= v5.6.21，可导入sql文件即可）
+- 数据库：mysql（版本建议：>= v5.6.21，导入server/db目录下的sql文件即可）
 
 
 
@@ -22,7 +22,7 @@
 | socket.io-client | 基于webSocket的库                | joi                 | 定义校验规则库                      |
 | vue-i18n         | 基于vue的国际化库                | @escook/express-joi | 自动对表单数据进行验证中间件        |
 | axios            | 基于promise的网络请求库          | mysql               | 数据库语言                          |
-| js-cookie        | 操作cookie使用库                 |                     |                                     |
+| js-cookie        | 操作cookie使用库                 | dayjs                | 日期库                               |
 | prettier         | 代码规范库                       |                     |                                     |
 | commitizen       | 提交规范库                       |                     |                                     |
 | nprogress        | 全局加载进度条                   |                     |                                     |

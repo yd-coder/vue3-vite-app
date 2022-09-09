@@ -32,14 +32,14 @@ router.post('/login', expressJoi(login_rule), (req, res) => {
     const user = { ...results[0], timestamp }
     delete user.password
     // 生成 Token 字符串
-    const tokenStr = jwt.sign(user, config.jwtSecretKey, {
-      expiresIn: '24h', // token 有效期为 24 个小时
+    const tokenStr = jwt.sign(user, config.jwtConfig.secret, {
+      expiresIn: config.jwtConfig.expiresIn, // token 有效期为 48 个小时
+      algorithm: config.jwtConfig.algorithms[0], // 指定加密算法
     })
     res.send({
       code: 200,
       msg: '登录成功，欢迎回来！',
-      // 为了方便客户端使用 Token，在服务器端直接拼接上 Bearer 的前缀
-      token: 'Bearer ' + tokenStr,
+      token: tokenStr,
       data: {
         ...user,
       },

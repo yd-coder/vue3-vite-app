@@ -14,7 +14,7 @@ function token() {
 service.interceptors.request.use(
   (config: any) => {
     if (token()) {
-      config.headers['Authorization'] = token()
+      config.headers['Authorization'] = 'Bearer ' + token()
     }
     return config
   },

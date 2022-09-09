@@ -2,49 +2,22 @@
   <div class="chat-session lg:w-20% w-70% p-8px box-border">
     <el-scrollbar max-height="100%">
       <!-- 会话列表 -->
-      <template v-for="item in handleSessionList" :key="item">
-        <div
-          v-if="true"
-          class="session-item px-20px py-10px cursor-pointer rounded-6px"
-          :class="[
-            (store.navId === '1' && item.id === store.sessionSelectId) ||
-            (store.navId === '2' && item.id === store.allSessionSelectId)
-              ? 'session-active'
-              : '',
-          ]"
-          @click="selectSession(item)"
-        >
+      <template v-for="item in store.sessionList" :key="item">
+        <div class="session-item px-20px py-10px cursor-pointer rounded-6px" :class="[
+        (item.id === store.sessionSelectId) ? 'session-active' : '']" @click="selectSession(item)">
           <el-row type="flex" align="middle">
-            <el-badge
-              :value="getUnReadCount(item.id)"
-              :max="10"
-              :hidden="!(getUnReadCount(item.id) && store.navId === '1')"
-            >
-              <el-avatar
-                shape="square"
-                class="!block"
-                :size="40"
-                fit="cover"
-                :src="item.avatar"
-              />
+            <el-badge :value="getUnReadCount(item.id)" :max="10" :hidden="!(getUnReadCount(item.id))">
+              <el-avatar shape="square" class="!block" :size="40" fit="cover" :src="item.avatar" />
             </el-badge>
             <div class="w-50% ml-10px text-left">
               <div class="truncate">{{ item.nick_name }}</div>
-              <div
-                class="truncate text-12px mt-2px"
-                style="color: var(--el-color-primary-light-3)"
-                v-show="store.navId === '1'"
-                v-html="getLastSession(item.id)"
-              ></div>
+              <div class="truncate text-12px mt-2px" style="color: var(--el-color-primary-light-3)"
+                v-html="getLastSession(item.id)"></div>
             </div>
           </el-row>
         </div>
       </template>
-      <el-empty
-        v-if="!handleSessionList.length"
-        :image-size="100"
-        description="好友列表为空"
-      />
+      <el-empty v-if="!store.sessionList.length" :image-size="100" description="好友列表为空" />
     </el-scrollbar>
   </div>
 </template>
@@ -52,10 +25,17 @@
 <script setup lang="ts">
 import { User } from '@/store/interface/index'
 import Conversition from '@/store/interface/index'
-import { computed, nextTick } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useMainStore } from '@/store/index'
 const store = useMainStore()
 
+onMounted(() => {
+  setTimeout(() => {
+    if (store.sessionList.length) {
+      selectSession(store.sessionList[0])
+    }
+  }, 500)
+})
 // 获取未读数量
 const getUnReadCount = computed(() => {
   return (id: Number) => {
@@ -63,10 +43,6 @@ const getUnReadCount = computed(() => {
   }
 })
 
-// 返回对应选择列表
-const handleSessionList = computed(() => {
-  return store.navId === '1' ? store.sessionList : store.allSessionList
-})
 
 // 获取最后一条消息内容
 const getLastSession = computed(() => {
@@ -109,34 +85,34 @@ function getUnReadCountById(id: Number) {
 // 选择聊天用户
 function selectSession(item: User) {
   store.drawer = false
-  if (store.navId === '1') {
-    store.sessionSelectId = item.id
-    store.recipient = item
-    store.changeReaded(item.id)
-    store.initEditor()
-    store.toBottom()
-  } else if (store.navId === '2') {
-    store.allSessionSelectId = item.id
-    store.readyRecipient = item
-  }
+  store.sessionSelectId = item.id
+  store.recipient = item
+  store.changeReaded(item.id)
+  store.initEditor()
+  store.toBottom()
 }
 </script>
 
 <style scoped lang="scss">
 $selectBg: var(--el-color-primary-light-9);
+
 .chat-session {
   :deep(p) {
     margin: 0;
   }
+
   border-right: 1px solid var(--el-border-color);
+
   @media (max-width: 1024px) {
     border-right: none;
   }
+
   .session-item {
     &:hover {
       background: $selectBg;
     }
   }
+
   .session-active {
     background: $selectBg;
   }
