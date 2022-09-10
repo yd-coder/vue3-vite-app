@@ -22,7 +22,6 @@ import { useMainStore } from '@/store/index'
 import { ElNotification } from 'element-plus';
 const store = useMainStore()
 defineProps<{
-  value: string
   id: string
   height: number
 }>()
