@@ -41,6 +41,7 @@ export const useMainStore = defineStore({
   },
   //可以操作异步 和 同步提交state
   actions: {
+    // token持久化
     setToken(data: any) {
       Cookies.set('Authorization', data)
       this.token = data
@@ -51,6 +52,11 @@ export const useMainStore = defineStore({
         this.tipMusic.currentTime = 0
         this.tipMusic.play()
       }
+    },
+    // 更新个人资料
+    updatePersonalInfo(data: any) {
+      this.userInfo = data
+      localStorage.setItem('userInfo', JSON.stringify(data))
     },
     // 设置会话窗口到达底部
     toBottom() {

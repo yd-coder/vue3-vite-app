@@ -22,7 +22,7 @@
             :prefix-icon="EditPen" />
           <template #footer>
             <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="dialogVisible = false">
+            <el-button type="primary" @click="handleUserInfo">
               保存
             </el-button>
           </template>
@@ -47,14 +47,14 @@ import { ref, computed } from 'vue'
 import { useMainStore } from '@/store/index'
 import router from '@/router'
 import Conversition from '@/store/interface/index';
-import { uploadAvatarUrl } from '@/api/user'
+import { uploadAvatarUrl, updateUserInfo } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { Plus, EditPen } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
 
 const store = useMainStore()
-const avatar = ref(store.personalInfo.avatar)
-const nick_name = ref(store.personalInfo.nick_name)
+const avatar = ref<string>(store.personalInfo.avatar)
+const nick_name = ref<string>(store.personalInfo.nick_name)
 const dialogVisible = ref(false)
 const emit = defineEmits(['on-click'])
 // 点击切换事件
@@ -96,6 +96,18 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     return false
   }
   return true
+}
+
+// 保存用户资料修改
+const handleUserInfo = () => {
+  updateUserInfo({ nick_name: nick_name.value, avatar: avatar.value, username: store.personalInfo.username }).then((res: any) => {
+    store.updatePersonalInfo({ ...store.personalInfo, nick_name: nick_name.value, avatar: avatar.value })
+    ElMessage.success('资料修改成功！')
+    dialogVisible.value = false
+  })
+    .catch((err: Error) => {
+      ElMessage.error('资料修改失败！')
+    })
 }
 
 // 注销登录

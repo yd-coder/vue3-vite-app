@@ -35,6 +35,15 @@ export function userList() {
   })
 }
 
-// 用户头像上传
+// 用户头像上传接口
 export const uploadAvatarUrl =
   import.meta.env.VITE_BASE_API + '/api/uploadAvatar'
+
+// 更改用户资料
+export function updateUserInfo(data: any) {
+  return request({
+    url: '/api/updateUserInfo',
+    method: 'post',
+    data,
+  })
+}
