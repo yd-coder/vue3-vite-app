@@ -34,3 +34,7 @@ export function userList() {
     method: 'get',
   })
 }
+
+// 用户头像上传
+export const uploadAvatarUrl =
+  import.meta.env.VITE_BASE_API + '/api/uploadAvatar'

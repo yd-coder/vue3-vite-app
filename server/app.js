@@ -61,6 +61,9 @@ app.use(function (err, req, res, next) {
   res.send({ code: 400, msg: err instanceof Error ? err.message : err })
 })
 
+// 托管静态资源
+app.use(express.static('public'))
+
 // 注册路由模块，添加访问前缀
 app.use('/api', router)
 
